@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../generic'
-require_relative '../common/grid.rb'
+require_relative '../common/grid'
 
 class Laboratory
   attr_reader :laser_grid, :height
@@ -40,36 +40,39 @@ class Laboratory
     @step_grid[line].each.with_index do |value, index|
       case value
       when 'S' then @tachyon_grid[line][index] = 1
-      when '|'
-        if @step_grid[line][index - 1] == '^' && @step_grid[line][index + 1] == '^'
-          @tachyon_grid[line][index] = (index - 1 .. index + 1).sum do |i|
-            @tachyon_grid[line - 1][i]
-          end
-        elsif @step_grid[line - 1][index] == '|'
-          if @step_grid[line][index - 1] == '^'
-            @tachyon_grid[line][index] =
-              @tachyon_grid[line - 1][index] + @tachyon_grid[line - 1][index - 1]
-          elsif @step_grid[line][index + 1] == '^'
-            @tachyon_grid[line][index] =
-              @tachyon_grid[line - 1][index] + @tachyon_grid[line - 1][index + 1]
-          else
-            @tachyon_grid[line][index] = @tachyon_grid[line - 1][index]
-          end
-        elsif @step_grid[line][index - 1] == '^'
-          @tachyon_grid[line][index] = @tachyon_grid[line - 1][index - 1]
-        elsif @step_grid[line][index + 1] == '^'
-          @tachyon_grid[line][index] = @tachyon_grid[line - 1][index + 1]
-        else
-          @tachyon_grid[line][index] = @tachyon_grid[line - 1][index]
-        end
+      when '|' then @tachyon_grid[line][index] = value_for_pipe(line, index)
       end
-      @tachyon_grid[line][index] = 0 if !@tachyon_grid[line][index].is_a?(Integer)
+      @tachyon_grid[line][index] = 0 unless @tachyon_grid[line][index].is_a?(Integer)
     end
   end
 
-  def print_laser_grid  = print_grid(@laser_grid)
+  def value_for_pipe(line, index)
+    if @step_grid[line][index - 1] == '^' && @step_grid[line][index + 1] == '^'
+      (index - 1..index + 1).sum { |i| @tachyon_grid[line - 1][i] }
+    elsif @step_grid[line - 1][index] == '|'
+      if @step_grid[line][index - 1] == '^'
+        @tachyon_grid[line - 1][index] + @tachyon_grid[line - 1][index - 1]
+      elsif @step_grid[line][index + 1] == '^'
+        @tachyon_grid[line - 1][index] + @tachyon_grid[line - 1][index + 1]
+      else
+        @tachyon_grid[line - 1][index]
+      end
+    elsif @step_grid[line][index - 1] == '^'
+      @tachyon_grid[line - 1][index - 1]
+    elsif @step_grid[line][index + 1] == '^'
+      @tachyon_grid[line - 1][index + 1]
+    else
+      @tachyon_grid[line - 1][index]
+    end
+  end
 
-  def print_step_grid = print_grid(@step_grid)
+  def print_laser_grid
+    print_grid(@laser_grid)
+  end
+
+  def print_step_grid
+    print_grid(@step_grid)
+  end
 
   def print_grid(grid)
     (0...@height).each do |y|
@@ -84,23 +87,32 @@ class Laboratory
   end
 
   def nr_of_splits
-    @height.times {|line| proceed(line)}
+    @height.times { |line| proceed(line) }
     @nr_splits
   end
 
   def tachyon_splits
-    @height.times {|line| proceed(line)}
-    @height.times {|line| tachyon_proceed(line)}
-    @tachyon_grid.last.sum {|v| v == '.' ? 0 : v}
+    @height.times { |line| proceed(line) }
+    @height.times { |line| tachyon_proceed(line) }
+    @tachyon_grid.last.sum { |v| v == '.' ? 0 : v }
   end
 end
 
-def main_method_a = data.nr_of_splits
-def main_method_b = data.tachyon_splits
+def main_method_a
+  data.nr_of_splits
+end
 
-def data = Laboratory.new(file.map(&:chars))
+def main_method_b
+  data.tachyon_splits
+end
 
-def file = read_file(example_file)
+def data
+  Laboratory.new(file.map(&:chars))
+end
+
+def file
+  read_file(assignment_file)
+end
 
 answer = main_method_b
 puts answer

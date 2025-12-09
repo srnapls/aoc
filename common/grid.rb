@@ -64,10 +64,15 @@ class Grid
 
   def clone = self.class.new(values.to_a.to_h)
 
+  def height = y_size
+
+  def width = x_size
+
   def update_values_to_coordinates!
     @values_to_coordinates =
       @values.group_by { |_key, value| value }.transform_values { |val| val.map(&:first) }
   end
+
   private
 
   def update_attributes

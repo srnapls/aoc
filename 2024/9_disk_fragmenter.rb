@@ -2,7 +2,7 @@
 
 require_relative '../generic'
 require_relative '../common/grid'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require 'set'
 
 FILE_EXAMPLE = '2024/9/example'

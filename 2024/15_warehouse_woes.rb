@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../generic'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 
@@ -12,7 +12,7 @@ FILE = '2024/15/assignment'
 USE_FILE = FILE
 
 # Added methods for coordinates in the warehouse
-class WarehouseCoordinate < Coordinate
+class WarehousePoint < Point
   def gps_coordinate
     100 * y_value + x_value
   end
@@ -118,7 +118,7 @@ class ChunkyWarehouse < Warehouse
   alias orig_blocks_movable? blocks_movable?
 
   def blocks_movable?(coordinate, direction)
-    if [Coordinate::LEFT, Coordinate::RIGHT].include?(direction)
+    if [Point::LEFT, Point::RIGHT].include?(direction)
       orig_blocks_movable?(coordinate, direction)
     else
       blocks_that_move = moving_blocks(coordinate, direction)
@@ -130,7 +130,7 @@ class ChunkyWarehouse < Warehouse
 
   alias orig_move_blocks! move_blocks!
   def move_blocks!(coordinate, direction)
-    if [Coordinate::LEFT, Coordinate::RIGHT].include?(direction)
+    if [Point::LEFT, Point::RIGHT].include?(direction)
       move_blocks_horizontal!(coordinate, direction)
     else
       move_blocks_vertical!(coordinate, direction)
@@ -145,7 +145,7 @@ class ChunkyWarehouse < Warehouse
         update(coordinate, BOX_R)
       elsif values[coordinate] == BOX_R
         update(coordinate, BOX_L)
-      elsif direction == Coordinate::LEFT # when nothing was there
+      elsif direction == Point::LEFT # when nothing was there
         update(coordinate, BOX_L)
       else
         update(coordinate, BOX_R)
@@ -155,7 +155,7 @@ class ChunkyWarehouse < Warehouse
 
   def move_blocks_vertical!(coordinate, direction)
     blocks = moving_blocks(coordinate, direction)
-    sorted_blocks = if direction == Coordinate::UP
+    sorted_blocks = if direction == Point::UP
                       blocks.sort_by(&:y_value)
                     else
                       blocks.sort_by(&:y_value).reverse
@@ -171,7 +171,7 @@ class ChunkyWarehouse < Warehouse
   end
 
   def moving_blocks(coordinate, direction)
-    if [Coordinate::LEFT, Coordinate::RIGHT].include?(direction)
+    if [Point::LEFT, Point::RIGHT].include?(direction)
       moving_blocks_horizontal(coordinate, direction)
     else
       moving_blocks_vertical(coordinate, direction)
@@ -235,7 +235,7 @@ def data(wide: false)
               row.chars
             end
       row.each_with_index do |cell, col_index|
-        coordinate = WarehouseCoordinate.new(col_index, row_index)
+        coordinate = WarehousePoint.new(col_index, row_index)
         grid_hash[coordinate] = (cell == '.' ? nil : cell)
       end
     end
@@ -245,13 +245,13 @@ def data(wide: false)
       instruction_guide.chars.each do |instruction|
         instructions << case instruction
                         when '^'
-                          Coordinate::UP
+                          Point::UP
                         when '>'
-                          Coordinate::RIGHT
+                          Point::RIGHT
                         when 'v'
-                          Coordinate::DOWN
+                          Point::DOWN
                         when '<'
-                          Coordinate::LEFT
+                          Point::LEFT
                         end
       end
     end

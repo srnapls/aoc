@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 
@@ -48,7 +48,7 @@ class CosmicSpace < Grid
     new_grid = fill_empty_space ? expanded_grid(grid) : grid
     new_grid.each.with_index do |row, y_index|
       row.each.with_index do |value, x_index|
-        mapping[Coordinate.new(x_index, y_index)] = value
+        mapping[Point.new(x_index, y_index)] = value
       end
     end
     mapping

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 
@@ -92,7 +92,7 @@ class PipeMaze < Grid
     status = options[1]
     (0...y_size).each do |y_index|
       (0...x_size).each do |x_index|
-        current_coord = Coordinate.new(x_index, y_index)
+        current_coord = Point.new(x_index, y_index)
         if @loop_coordinates.include?(current_coord)
           case value(x_index, y_index)
           when '|'
@@ -124,7 +124,7 @@ end
 grid_values = {}
 data.each.with_index do |row, y|
   row.split('').each.with_index do |val, x|
-    grid_values[Coordinate.new(x, y)] = val
+    grid_values[Point.new(x, y)] = val
   end
 end
 

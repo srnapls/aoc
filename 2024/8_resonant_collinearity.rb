@@ -2,7 +2,7 @@
 
 require_relative '../generic'
 require_relative '../common/grid'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require 'set'
 
 FILE_EXAMPLE = '2024/8/example'
@@ -19,7 +19,7 @@ class AntinodeGrid
 
     mapping.each_with_index do |row, row_index|
       row.each_with_index do |value, column_index|
-        coord = Coordinate.new(column_index, row_index)
+        coord = Point.new(column_index, row_index)
         if value != '.'
           @map[value] ||= Set.new
           @map[value] << coord

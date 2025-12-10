@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../generic'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 
@@ -45,10 +45,10 @@ class Reindeer
   # E: 1
   # S: 2
   # W: 3
-  DIRECTIONS = { 0 => Coordinate::UP,
-                 1 => Coordinate::RIGHT,
-                 2 => Coordinate::DOWN,
-                 3 => Coordinate::LEFT }.freeze
+  DIRECTIONS = { 0 => Point::UP,
+                 1 => Point::RIGHT,
+                 2 => Point::DOWN,
+                 3 => Point::LEFT }.freeze
 
   attr_reader :start_point, :score, :start_pair, :all_visited
   attr_accessor :maze, :costs
@@ -180,7 +180,7 @@ def data
   values = {}
   read_file(USE_FILE).each_with_index.map do |row, j|
     row.chars.each_with_index.map do |cell, i|
-      values[Coordinate.new(i, j)] = cell
+      values[Point.new(i, j)] = cell
     end
   end
   maze = Maze.new(values)

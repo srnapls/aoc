@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../generic'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 
@@ -16,7 +16,7 @@ class RobotGrid < Grid
       grid_hash = {}
       width.times.each do |x|
         height.times.each do |y|
-          grid_hash[Coordinate.new(x, y)] = []
+          grid_hash[Point.new(x, y)] = []
         end
       end
       new(grid_hash)
@@ -24,7 +24,7 @@ class RobotGrid < Grid
   end
 
   def value(x, y)
-    val = values[Coordinate.new(x, y)]
+    val = values[Point.new(x, y)]
     if val.empty?
       '.'
     else
@@ -107,7 +107,7 @@ class RobotField
 
   def symmetrical_quadrants?(quadrant1, quadrant2)
     quadrant1.all? do |coordinate|
-      mirrored_coordinate = Coordinate.new(width - 1 - coordinate.x_value, coordinate.y_value)
+      mirrored_coordinate = Point.new(width - 1 - coordinate.x_value, coordinate.y_value)
       quadrant2.include?(mirrored_coordinate)
     end
   end
@@ -146,10 +146,10 @@ class Robot
   end
 
   def move_nr_of_times(number, width, height)
-    new_position = start_position + (Coordinate.new(number, number) * velocity)
+    new_position = start_position + (Point.new(number, number) * velocity)
     new_x = new_position.x_value % width
     new_y = new_position.y_value % height
-    Coordinate.new(new_x, new_y)
+    Point.new(new_x, new_y)
   end
 
 end
@@ -161,8 +161,8 @@ def data
       [sub_part.first.split('=').last.to_i, sub_part.last.to_i]
     end
 
-    coordinate = Coordinate.new(numbers.first[0], numbers.first[1])
-    velocity = Coordinate.new(numbers.last[0], numbers.last[1])
+    coordinate = Point.new(numbers.first[0], numbers.first[1])
+    velocity = Point.new(numbers.last[0], numbers.last[1])
     Robot.new(coordinate, velocity)
   end
 end

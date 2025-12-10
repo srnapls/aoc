@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../generic'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require_relative '../common/grid'
 require 'set'
 

@@ -12,7 +12,7 @@ class Grid
       new_grid = {}
       matrix.each_with_index do |row, row_index|
         row.each_with_index do |cell, column_index|
-          new_grid[Coordinate.new(column_index, row_index)] = cell
+          new_grid[Point.new(column_index, row_index)] = cell
         end
       end
       new(new_grid)
@@ -24,14 +24,14 @@ class Grid
     update_attributes
   end
 
-  # @return [<Coordinate>]
+  # @return [<Point>]
   def neighbours(coord) = in_grid(coord.neighbours)
 
   def neighbourhood(coord) = in_grid(coord.neighbourhood)
 
   def distance(start_point, end_point) = start_point.distance(end_point)
 
-  # @return [<Coordinate>]
+  # @return [<Point>]
   def in_grid(coordinates)
     coordinates.select {|coord| coord.x_value < x_size && coord.y_value < y_size}
   end
@@ -48,7 +48,7 @@ class Grid
 
   def [](coord) = values[coord]
 
-  def value(x, y) = values[Coordinate.new(x, y)]
+  def value(x, y) = values[Point.new(x, y)]
 
   def update(coord, value)
     old_value = values[coord]

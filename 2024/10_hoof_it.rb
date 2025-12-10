@@ -2,7 +2,7 @@
 
 require_relative '../generic'
 require_relative '../common/grid'
-require_relative '../common/coordinate'
+require_relative '../common/point'
 require 'set'
 
 FILE_EXAMPLE = '2024/10/example'
@@ -18,7 +18,7 @@ class TopographicMap < Grid
     values_hash = {}
     input.each_with_index do |row, j|
       row.each_with_index do |value, i|
-        values_hash[Coordinate.new(i, j)] = value
+        values_hash[Point.new(i, j)] = value
       end
     end
     super(values_hash)
